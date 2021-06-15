@@ -9,12 +9,14 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
 
   test "index as admin including pagination and delete links" do
     log_in_as(@admin)
+    # Use per_page to match 'per_page' on 'users_controller' index action
+    first_page = User.paginate(page: 1, per_page: 10)
+    first_page.first.toggle!(:activated)
     get users_path
     assert_template 'users/index'
     assert_select 'div.pagination', count: 2
-    # Use per_page to match 'per_page' on 'users_controller' index action
-    first_page = User.paginate(page: 1, per_page: 10)
-    first_page.each do |user|
+    assigns(:users).each do |user|
+      assert user.activated?
       assert_select 'a[href=?]', user_path(user), text: user.name
       unless user == @admin
         assert_select 'a[href=?]', user_path(user), text: 'Delete'
