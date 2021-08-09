@@ -8,13 +8,14 @@ User.create!(name:  'Example User',
              activated_at: Time.zone.now)
 
 User.create!(name:  'Paco C',
-             email: 'pacocontrerasdct@gmail.com',
-             password:              'helado2Tiros',
-             password_confirmation: 'helado2Tiros',
+             email: 'pacoc@gmail.com',
+             password:              '123456',
+             password_confirmation: '123456',
              admin:        true,
              activated:    true,
              activated_at: Time.zone.now)
 
+# Create a group of users to test pagination
 99.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
@@ -25,4 +26,11 @@ User.create!(name:  'Paco C',
                password_confirmation: password,
                activated:    true,
                activated_at: Time.zone.now)
+end
+
+# Generate microposts for a subset of users.
+users = User.order(:created_at).take(6)
+34.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each { |user| user.microposts.create!(content: content) }
 end
