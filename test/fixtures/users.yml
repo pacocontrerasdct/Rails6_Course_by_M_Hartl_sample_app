@@ -5,7 +5,7 @@ michael:
   admin:        true
   activated:    true
   activated_at: <%= Time.zone.now %>
-
+  
 inactive:
   name: Inactive User
   email: inactive@example.gov
